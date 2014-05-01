@@ -1,0 +1,5 @@
+cython==0.20.1
+kivy==1.8.0
+hg+https://bitbucket.org/pygame/pygame@823708f#egg=pygame
+#pygments==1.6
+#watchdog==0.7.1

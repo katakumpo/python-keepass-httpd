@@ -5,9 +5,13 @@ import logging
 import Tkinter
 import tkMessageBox
 import ttk
+import os
 
 from keepass_http.backends import WrongPassword
 from keepass_http.core import Conf
+from kivy.core.window.window_pygame import WindowPygame
+from keepass_http.utils import get_absolute_path_to_resource
+from kivy.base import EventLoop
 
 log = logging.getLogger(__name__)
 
@@ -159,3 +163,75 @@ class OpenDatabase(CenteredWindowMixIn, Tkinter.Tk):  # pragma: no cover
         self._success = None
         self._frame_1.destroy()
         self.quit()
+
+
+
+import kivy
+kivy.require("1.8.0")
+
+from kivy.app import App
+from kivy.uix.button import Button
+
+from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
+#Builder.load_file("/home/kiwisauce/devel/workspace/bla.git/file.kv")
+
+from kivy.logger import Logger
+
+class Calc(BoxLayout):
+    pass
+
+from kivy.config import Config
+Config.set('graphics', 'width', '360')
+Config.set('graphics', 'height', '130')
+Config.set('kivy', 'log_enable', '0')
+
+from kivy.interactive import InteractiveLauncher
+
+class AskForPassphraseApp(App):
+
+    kv_file = get_absolute_path_to_resource(os.path.join("conf", "askforpassphrase.kv"))
+
+    @classmethod
+    def open(cls, max_try_count):
+        success = False
+        try_count = 1
+        while try_count <= max_try_count:
+            try:
+                gui = InteractiveLauncher(cls())
+                #gui.run()
+                gui.safeIn()
+                gui.run()
+                #gui.stop()
+            except WrongPassword:
+                gui.stop()
+                print ("fehl")
+                continue
+
+#            s = gui._success
+#            if s is True:
+#                log.info("Passphrase accepted")
+#                success = True
+                #gui.stop()
+#                gui._app_window.close()
+#                break
+ #           if s is None:
+  #              break
+   #         else:
+    #            try_count += 1
+     #           gui._app_window.close()
+      #          continue
+       # print ("SUCCESS", success)
+        #return success
+
+    def __init__(self, *args, **kwargs):
+        super(AskForPassphraseApp, self).__init__(*args, **kwargs)
+        self._kpconf = Conf()
+        self._success = None
+
+    def build(self):
+        return Calc()
+
+    def store_passphrase(self, passphrase):
+        self._kpconf.backend.open_database(passphrase)
+

@@ -63,7 +63,7 @@ def main():
     backend = backends.BaseBackend.get_by_filepath(database_path)
     kpconf.set_backend(backend)
 
-    success = kpconf.get_selected_ui().OpenDatabase.open(MAX_TRY_COUNT)
+    success = kpconf.get_selected_ui().AskForPassphraseApp.open(MAX_TRY_COUNT)
     if success is False:
         sys.exit("Wrong passphrase after %d attempts" % MAX_TRY_COUNT)
 

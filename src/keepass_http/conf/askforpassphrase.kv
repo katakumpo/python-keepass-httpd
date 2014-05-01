@@ -1,0 +1,32 @@
+#:kivy 1.8.0
+
+<Calc>:
+    _passphrase_field: _a
+    padding: 10
+
+    GridLayout:
+        spacing: 10
+        row_force_default: True
+        row_default_height: 30
+        rows: 3
+        cols: 1
+
+        Label:
+            text: 'Please enter the passphrase for the database:'
+
+        TextInput:
+            id: _a
+
+        GridLayout:
+            padding_bottom: 10
+            spacing: 10
+            row_force_default: True
+            row_default_height: 30
+            cols: 2
+            Button:
+                text: 'ok'
+                on_press: app.store_passphrase(root._passphrase_field.text)
+
+            Button:
+                text: 'cancel'
+                on_press: app.stop()
